@@ -139,6 +139,9 @@ count_users = keycloak_admin.users_count()
 # Get users Returns a list of users, filtered according to query parameters
 users = keycloak_admin.get_users({})
 
+# Get users Returns a list of users, filtered according to query parameter (no pagination)
+users = keycloak_admin.lookup_users({})
+
 # Get user ID from name
 user-id-keycloak = keycloak_admin.get_user_id("example@example.com")
 

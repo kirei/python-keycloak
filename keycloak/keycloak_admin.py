@@ -29,7 +29,7 @@ from builtins import isinstance
 from typing import List, Iterable
 
 from keycloak.urls_patterns import URL_ADMIN_GROUPS_REALM_ROLES, \
-    URL_ADMIN_GET_GROUPS_REALM_ROLES, URL_ADMIN_REALM_ROLES_ROLE_BY_NAME
+    URL_ADMIN_GET_GROUPS_REALM_ROLES, URL_ADMIN_REALM_ROLES_ROLE_BY_NAME, URL_USERS_LOOKUP
 from .connection import ConnectionManager
 from .exceptions import raise_error_from_response, KeycloakGetError
 from .keycloak_openid import KeycloakOpenID
@@ -305,6 +305,20 @@ class KeycloakAdmin:
         """
         params_path = {"realm-name": self.realm_name}
         return self.__fetch_all(URL_ADMIN_USERS.format(**params_path), query)
+
+    def lookup_users(self, query=None):
+        """
+        Return a list of users, filtered according to query parameter
+
+        UserRepresentation
+        https://www.keycloak.org/docs-api/8.0/rest-api/index.html#_userrepresentation
+
+        :param query: Query parameters (optional)
+        :return: UserRepresentation
+        """
+        params_path = {"realm-name": self.realm_name}
+        data_raw = self.raw_get(URL_USERS_LOOKUP.format(**params_path), **query)
+        return raise_error_from_response(data_raw, KeycloakGetError)
 
     def get_idps(self):
         """
